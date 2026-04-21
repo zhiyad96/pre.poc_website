@@ -1,37 +1,40 @@
 import ScrollReveal from './scrollreveal';
+import { ReactNode } from "react";
+
 
 export default function Overview() {
-  const services = [
-    {
-      id: "01",
-      title: "Production",
-      desc: "Cinematic storytelling and high-fidelity product imagery.",
-      // Replace with your actual assets
-      img: "https://www.htnm.in/wp-content/uploads/2025/10/Best-Video-Production-Company-Near-You.jpg", 
-      
-    },
-    {
-      id: "02",
-      title: "Strategy & PR",
-      desc: "Holistic branding designed to build trust and market authority.",
-      img: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=600&auto=format&fit=crop",
-      
-    },
-    {
-      id: "03",
-      title: "Content Creation",
-      desc: "Professional copywriting that speaks your audience's language.",
-      img: "https://images.unsplash.com/photo-1505330622279-bf7d7fc918f4?q=80&w=600&auto=format&fit=crop",
-      
-    },
-    {
-      id: "04",
-      title: "Corporate Training",
-      desc: "Equipping teams to represent your brand effectively.",
-      img: "https://images.unsplash.com/photo-1517048676732-d65bc937f952?q=80&w=600&auto=format&fit=crop",
-      
-    }
-  ];
+
+ type Service = {
+  id: string;
+  title: string;
+  desc: string;
+  img: string;
+  icon?: ReactNode; // ✅ FIX (optional, keeps design same)
+};
+
+// 👉 Keep your existing data (no change needed)
+const services: Service[] = [
+  {
+    id: "1",
+    title: "Service One",
+    desc: "Description one",
+    img: "/img1.jpg",
+    // icon: <SomeIcon />  // optional
+  },
+  {
+    id: "2",
+    title: "Service Two",
+    desc: "Description two",
+    img: "/img2.jpg",
+  },
+  {
+    id: "3",
+    title: "Service Three",
+    desc: "Description three",
+    img: "/img3.jpg",
+  },
+];
+
 
   return (
     <div className="relative bg-[#0f0618] min-h-screen py-24 md:py-32 text-white overflow-hidden selection:bg-pink-500/20 selection:text-white">
