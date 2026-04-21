@@ -9,10 +9,9 @@ export default function Overview() {
   title: string;
   desc: string;
   img: string;
-  icon?: ReactNode; // ✅ FIX (optional, keeps design same)
+  icon?: ReactNode; 
 };
 
-// 👉 Keep your existing data (no change needed)
 const services: Service[] = [
   {
     id: "1",
