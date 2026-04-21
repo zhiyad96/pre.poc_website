@@ -1,8 +1,13 @@
 "use client";
 
+import { ReactNode } from "react";
 import { motion } from "framer-motion";
 
-export default function FramerWrapper({ children }) {
+export default function FramerWrapper({
+  children,
+}: {
+  children: ReactNode;
+}) {
   return (
     <motion.div
       initial={{ opacity: 0 }}
