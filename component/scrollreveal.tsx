@@ -1,8 +1,7 @@
-﻿"use client";
+"use client";
 
-import React from "react";
-import { motion, useInView } from "framer-motion";
-import { useRef } from "react";
+import React, { useRef } from "react";
+import { motion, useInView, Variants } from "framer-motion";
 
 interface ScrollRevealProps {
   children: React.ReactNode;
@@ -21,19 +20,22 @@ export default function ScrollReveal({
   direction = "up",
   type = "slide",
   duration = 0.8,
-  staggerChildren = 0
+  staggerChildren = 0,
 }: ScrollRevealProps) {
-  const ref = useRef(null);
+
+  // ✅ FIX: give proper type
+  const ref = useRef<HTMLDivElement | null>(null);
+
   const isInView = useInView(ref, { once: true, margin: "-50px" });
 
   const directionVariants = {
     up: { y: 60 },
     down: { y: -60 },
     left: { x: 60 },
-    right: { x: -60 }
+    right: { x: -60 },
   };
 
-  const getInitialVariants = () => {
+  const getInitialVariants = (): Variants["hidden"] => {
     switch (type) {
       case "fade":
         return { opacity: 0 };
@@ -44,7 +46,12 @@ export default function ScrollReveal({
       case "bounce":
         return { opacity: 0, scale: 0.3, ...directionVariants[direction] };
       case "rotate":
-        return { opacity: 0, rotate: -10, scale: 0.9, ...directionVariants[direction] };
+        return {
+          opacity: 0,
+          rotate: -10,
+          scale: 0.9,
+          ...directionVariants[direction],
+        };
       case "jump":
         return { opacity: 0, y: 100, scale: 0.5, rotate: -5 };
       default:
@@ -52,64 +59,63 @@ export default function ScrollReveal({
     }
   };
 
-  const getAnimateVariants = () => {
-    switch (type) {
-      case "bounce":
-        return { opacity: 1, scale: 1, x: 0, y: 0, rotate: 0 };
-      case "jump":
-        return { opacity: 1, scale: 1, x: 0, y: 0, rotate: 0 };
-      default:
-        return { opacity: 1, scale: 1, x: 0, y: 0, rotate: 0 };
-    }
+  const getAnimateVariants = (): Variants["visible"] => {
+    return { opacity: 1, scale: 1, x: 0, y: 0, rotate: 0 };
   };
 
   const getTransition = () => {
     const baseTransition = {
       duration,
       delay,
-      ease: [0.25, 0.46, 0.45, 0.94] // Custom cubic-bezier for modern feel
+      ease: "easeOut" as const, // ✅ FIX: proper type
     };
 
     if (type === "bounce") {
       return {
         ...baseTransition,
-        type: "spring",
+        type: "spring" as const,
         stiffness: 100,
-        damping: 10
+        damping: 10,
       };
     }
 
     if (type === "jump") {
       return {
-        type: "spring",
+        type: "spring" as const,
         stiffness: 200,
         damping: 12,
         mass: 0.8,
-        delay
+        delay,
       };
     }
 
     return baseTransition;
   };
 
-  const containerVariants = staggerChildren > 0 ? {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: staggerChildren,
-        delayChildren: delay
-      }
-    }
-  } : {};
+  const containerVariants: Variants =
+    staggerChildren > 0
+      ? {
+          hidden: { opacity: 0 },
+          visible: {
+            opacity: 1,
+            transition: {
+              staggerChildren,
+              delayChildren: delay,
+            },
+          },
+        }
+      : {};
 
-  const childVariants = staggerChildren > 0 ? {
-    hidden: getInitialVariants(),
-    visible: {
-      ...getAnimateVariants(),
-      transition: getTransition()
-    }
-  } : {};
+  const childVariants: Variants =
+    staggerChildren > 0
+      ? {
+          hidden: getInitialVariants(),
+          visible: {
+            ...getAnimateVariants(),
+            transition: getTransition(),
+          },
+        }
+      : {};
 
   if (staggerChildren > 0) {
     return (
@@ -120,8 +126,8 @@ export default function ScrollReveal({
         initial="hidden"
         animate={isInView ? "visible" : "hidden"}
       >
-        {React.Children.map(children, (child) => (
-          <motion.div variants={childVariants}>
+        {React.Children.map(children, (child, i) => (
+          <motion.div key={i} variants={childVariants}>
             {child}
           </motion.div>
         ))}
