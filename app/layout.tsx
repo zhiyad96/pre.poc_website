@@ -13,11 +13,7 @@ export const metadata = {
   description: "Digital Engineering Labs",
 };
 
-export default function RootLayout({
-  children,
-}: {
-  children: ReactNode;
-}) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className="scroll-smooth">
       <body className={`${poppins.className} bg-[#0f011d] transition-colors duration-500`}>
